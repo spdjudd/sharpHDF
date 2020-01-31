@@ -3,6 +3,7 @@
  * See license in repo for more information                                  *
  * https://github.com/sharpHDF/sharpHDF                                      *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+using System.IO;
 using NUnit.Framework;
 using sharpHDF.Library.Objects;
 
@@ -14,7 +15,7 @@ namespace sharpHDF.Library.Tests.Objects
         [OneTimeSetUp]
         public void Setup()
         {
-            DirectoryName = @"c:\temp\hdf5tests\grouptests";
+            DirectoryName = Path.Join("testdata", "grouptests");
 
             CleanDirectory();
         }

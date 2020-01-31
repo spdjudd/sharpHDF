@@ -17,7 +17,7 @@ namespace sharpHDF.Library.Tests.Objects
         [OneTimeSetUp]
         public void Setup()
         {
-            DirectoryName = @"c:\temp\hdf5tests\filetests";
+            DirectoryName = Path.Join("testdata", "filetests");
 
             CleanDirectory();
         }
