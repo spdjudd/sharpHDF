@@ -31,7 +31,7 @@ namespace sharpHDF.Library.Helpers
             AbstractHdf5Object obj =_attributes.ParentObject;
 
             int id = H5A.iterate(obj.Id.Value, H5.index_t.NAME, H5.iter_order_t.NATIVE, ref n,
-                delegate(int _id, IntPtr _namePtr, ref H5A.info_t _ainfo, IntPtr _data)
+                delegate(long _id, IntPtr _namePtr, ref H5A.info_t _ainfo, IntPtr _data)
                 {
                     string attributeName = Marshal.PtrToStringAnsi(_namePtr);
 
@@ -110,11 +110,8 @@ namespace sharpHDF.Library.Helpers
         /// <returns></returns>
         public static Hdf5Attribute GetStringAttribute(Hdf5Identifier _objectId, string _title)
         {
-            int attributeId = 0;
-            int typeId = 0;
-
-            attributeId = H5A.open(_objectId.Value, _title);
-            typeId = H5A.get_type(attributeId);
+            var attributeId = H5A.open(_objectId.Value, _title);
+            var typeId = H5A.get_type(attributeId);
             var sizeData = H5T.get_size(typeId);
             var size = sizeData.ToInt32();
             byte[] strBuffer = new byte[size];

@@ -31,7 +31,7 @@ namespace sharpHDF.Library.Helpers
                 IntPtr op_data = (IntPtr) hnd;
 
                 H5L.iterate(_parentObject.Id.Value, H5.index_t.NAME, H5.iter_order_t.NATIVE, ref pos,
-                    delegate(int _objectId, IntPtr _namePtr, ref H5L.info_t _info, IntPtr _data)
+                    delegate(long _objectId, IntPtr _namePtr, ref H5L.info_t _info, IntPtr _data)
                     {
                         string objectName = Marshal.PtrToStringAnsi(_namePtr);
 
@@ -127,7 +127,7 @@ namespace sharpHDF.Library.Helpers
         {
             Hdf5Path path = _parentPath.Append(_name);
 
-            int id = H5G.create(_fileId.Value, path.FullPath);
+            var id = H5G.create(_fileId.Value, path.FullPath);
 
             if (id > 0)
             {

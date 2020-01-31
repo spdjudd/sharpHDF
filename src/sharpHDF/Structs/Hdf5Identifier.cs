@@ -33,7 +33,7 @@ namespace sharpHDF.Library.Structs
 
         public override int GetHashCode()
         {
-            return Value;
+            return (int)Value;
         }
     }
 }

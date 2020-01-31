@@ -5,3 +5,4 @@ src/sharpHDFTests/bin/
 src/sharpHDFTests/obj/
 *.suo
 *.user
+/src/sharpHDF/.vs/
