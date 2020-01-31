@@ -1,112 +1,19 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{82178FAC-C9FB-4F7D-A6BC-380AB1B6CEF9}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>sharpHDF.Library</RootNamespace>
-    <AssemblyName>sharpHDF</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">.\</SolutionDir>
-    <RestorePackages>true</RestorePackages>
-    <TargetFrameworkProfile />
+    <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\x64\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;HDF5_VER1_10</DefineConstants>
-    <DebugType>full</DebugType>
-    <PlatformTarget>x64</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DefineConstants>TRACE;HDF5_VER1_10</DefineConstants>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
-    <OutputPath>bin\x64\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>x64</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DefineConstants>TRACE;HDF5_VER1_10</DefineConstants>
   </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="HDF.PInvoke, Version=1.10.502.0, Culture=neutral, PublicKeyToken=18793c1fcffe58a3, processorArchitecture=MSIL">
-      <HintPath>packages\HDF.PInvoke.NETStandard.1.10.502\lib\netstandard2.0\HDF.PInvoke.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
+    <PackageReference Include="HDF.PInvoke.NETStandard" Version="1.10.502" />
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Enums\Hdf5ByteOrder.cs" />
-    <Compile Include="Enums\Hdf5DataTypes.cs" />
-    <Compile Include="Exceptions\Hdf5ArrayDimensionsMismatchException.cs" />
-    <Compile Include="Exceptions\Hdf5ArraySizeMismatchException.cs" />
-    <Compile Include="Exceptions\Hdf5AttributeAlreadyExistException.cs" />
-    <Compile Include="Exceptions\Hdf5FileExistsException.cs" />
-    <Compile Include="Exceptions\Hdf5FileNotFoundException.cs" />
-    <Compile Include="Exceptions\Hdf5TypeMismatchException.cs" />
-    <Compile Include="Exceptions\Hdf5UnknownDataType.cs" />
-    <Compile Include="Exceptions\Hdf5UnknownException.cs" />
-    <Compile Include="Exceptions\Hdf5UnsupportedDataTypeException.cs" />
-    <Compile Include="Helpers\AttributeHelper.cs" />
-    <Compile Include="Helpers\DatasetHelper.cs" />
-    <Compile Include="Helpers\DataspaceHelper.cs" />
-    <Compile Include="Helpers\FileHelper.cs" />
-    <Compile Include="Helpers\GroupHelper.cs" />
-    <Compile Include="Helpers\IdHelper.cs" />
-    <Compile Include="Helpers\PathHelper.cs" />
-    <Compile Include="Helpers\TypeHelper.cs" />
-    <Compile Include="Interfaces\IHasAttributes.cs" />
-    <Compile Include="Interfaces\IHasDatasets.cs" />
-    <Compile Include="Interfaces\IHasGroups.cs" />
-    <Compile Include="Interfaces\IHasName.cs" />
-    <Compile Include="Objects\AbstractHdf5Object.cs" />
-    <Compile Include="Objects\Hdf5Attribute.cs" />
-    <Compile Include="Objects\Hdf5Attributes.cs" />
-    <Compile Include="Objects\Hdf5CompressionProperty.cs" />
-    <Compile Include="Objects\Hdf5Dataset.cs" />
-    <Compile Include="Objects\Hdf5Datasets.cs" />
-    <Compile Include="Objects\Hdf5DimensionProperty.cs" />
-    <Compile Include="Objects\Hdf5Dataspace.cs" />
-    <Compile Include="Objects\Hdf5Groups.cs" />
-    <Compile Include="Objects\ReadonlyList.cs" />
-    <Compile Include="Objects\Hdf5DataType.cs" />
-    <Compile Include="Objects\Hdf5File.cs" />
-    <Compile Include="Objects\Hdf5Group.cs" />
-    <Compile Include="Objects\Hdf5Path.cs" />
-    <Compile Include="Objects\ReadonlyNamedItemList.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Structs\Hdf5Identifier.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PostBuildEvent>
-    </PostBuildEvent>
-  </PropertyGroup>
-  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
-  </Target>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+
 </Project>
