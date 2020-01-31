@@ -307,7 +307,8 @@ namespace sharpHDF.Library.Helpers
             string _name,
             Hdf5DataTypes _datatype,
             int _numberOfDimensions,
-            List<Hdf5DimensionProperty> _properties)
+            List<Hdf5DimensionProperty> _properties,
+            Hdf5CompressionProperty _compressionProperty = null)
         {
             Hdf5Dataset dataset = CreateDataset(
                 _fileId, 
@@ -315,7 +316,8 @@ namespace sharpHDF.Library.Helpers
                 _name, 
                 _datatype,
                 _numberOfDimensions,
-                _properties);
+                _properties,
+                _compressionProperty);
 
             if (dataset != null)
             {
@@ -331,26 +333,29 @@ namespace sharpHDF.Library.Helpers
             string _name, 
             Hdf5DataTypes _datatype, 
             int _numberOfDimensions, 
-            List<Hdf5DimensionProperty> _properties)
+            List<Hdf5DimensionProperty> _properties,
+            Hdf5CompressionProperty _compressionProperty = null)
         {
             Hdf5Path path = _parentPath.Append(_name);
 
             UInt64[] dimensionSize = new UInt64[_numberOfDimensions];
             UInt64[] maxSize = null; // new UInt64[_numberOfDimensions];
 
+            if (_numberOfDimensions != _properties.Count ||
+                (_compressionProperty != null && _numberOfDimensions != _compressionProperty.ChunkDimensions.Length))
+            {
+                throw new Hdf5ArrayDimensionsMismatchException();
+            }
+
             int i = 0;
             foreach (var property in _properties)
             {
                 dimensionSize[i] = property.CurrentSize;
 
-                //if (property.MaximumSize == UInt64.MaxValue)
-                //{
-                //    maxSize[i] = H5S.UNLIMITED;
-                //}
-                //else
-                //{
-                //    maxSize[i] = property.MaximumSize;
-                //}                
+                if (_compressionProperty != null && _compressionProperty.ChunkDimensions[i] > property.CurrentSize)
+                {
+                    throw new Hdf5ArraySizeMismatchException();
+                }
 
                 i++;
             }
@@ -361,7 +366,14 @@ namespace sharpHDF.Library.Helpers
             Hdf5Identifier typeId = H5T.copy(TypeHelper.GetNativeType(_datatype).Value).ToId();
             var status = H5T.set_order(typeId.Value, H5T.order_t.LE);
 
-            Hdf5Identifier datasetId = H5D.create(_fileId.Value, path.FullPath, typeId.Value, dataspaceId.Value).ToId();
+            var plist_id = _compressionProperty != null ? H5P.create(H5P.DATASET_CREATE) : 0;
+            if (plist_id != 0)
+            {
+                H5P.set_chunk(plist_id, _compressionProperty.ChunkDimensions.Length, _compressionProperty.ChunkDimensions);
+                H5P.set_deflate(plist_id, _compressionProperty.CompressionLevel);
+            }
+
+            Hdf5Identifier datasetId = H5D.create(_fileId.Value, path.FullPath, typeId.Value, dataspaceId.Value, dcpl_id: plist_id).ToId();
 
             Hdf5Dataset dataset = null;
 
@@ -377,6 +389,10 @@ namespace sharpHDF.Library.Helpers
             }
 
             H5T.close(typeId.Value);
+            if (plist_id != 0)
+            {
+                H5P.close(plist_id);
+            }
 
             FileHelper.FlushToFile(_fileId);
 
