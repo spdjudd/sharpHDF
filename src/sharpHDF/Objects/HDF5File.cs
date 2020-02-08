@@ -19,14 +19,14 @@ namespace sharpHDF.Library.Objects
         /// Opens an existing file and loads up the group and dataset headers in the object.
         /// </summary>
         /// <param name="_filename"></param>
-        public Hdf5File(string _filename)
+        public Hdf5File(string _filename, bool readOnly = true)
         {
             if (!File.Exists(_filename))
             {
                 throw new Hdf5FileNotFoundException();
             }
 
-            Id = H5F.open(_filename, H5F.ACC_RDWR).ToId();
+            Id = H5F.open(_filename, readOnly ? H5F.ACC_RDONLY : H5F.ACC_RDWR).ToId();
 
             if (Id.Value > 0)
             {
@@ -59,7 +59,7 @@ namespace sharpHDF.Library.Objects
             if (fileId.Value > 0)
             {
                 H5F.close(fileId.Value);
-                return new Hdf5File(_filename);
+                return new Hdf5File(_filename, false);
             }
 
             throw new Hdf5UnknownException();

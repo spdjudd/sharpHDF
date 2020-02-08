@@ -376,7 +376,7 @@ namespace sharpHDF.Library.Tests.Objects
 
             file.Close();
 
-            file = new Hdf5File(fileName);
+            file = new Hdf5File(fileName, false);
             var attibutes = file.Attributes;
             Assert.AreEqual(2, attibutes.Count);
 
@@ -417,7 +417,7 @@ namespace sharpHDF.Library.Tests.Objects
 
             file.Close();
 
-            file = new Hdf5File(fileName);
+            file = new Hdf5File(fileName, false);
             group = file.Groups[0];
             var attibutes = group.Attributes;
             Assert.AreEqual(2, attibutes.Count);
@@ -466,7 +466,7 @@ namespace sharpHDF.Library.Tests.Objects
 
             file.Close();
 
-            file = new Hdf5File(fileName);
+            file = new Hdf5File(fileName, false);
             group = file.Groups[0];
             dataset = group.Datasets[0];
             var attibutes = dataset.Attributes;
